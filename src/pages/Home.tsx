@@ -1,8 +1,10 @@
-import { Navigation } from '../components/index';
+import { SignIn } from '.';
+// import { Navigation } from '../components/index';
 
 const Home = () => {
-    return <Navigation />
-
+    return <>
+        <SignIn></SignIn>
+    </>
 }
 
 export default Home;
