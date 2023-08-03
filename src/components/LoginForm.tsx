@@ -1,8 +1,11 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import useAuthForm from '../hooks/useAuthForm';
+import { useNavigate } from 'react-router-dom';
 
 const LoginForm = () => {
+    const navigator = useNavigate();
+
     const { email, password, isFormValid, handleEmailChange, handlePasswordChange } = useAuthForm();
 
 

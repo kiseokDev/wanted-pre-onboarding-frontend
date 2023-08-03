@@ -1,7 +1,34 @@
 import { useAuthForm } from '../hooks';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 export default function SignUpForm() {
+    const navigator = useNavigate();
+
     const { email, password, isFormValid, handleEmailChange, handlePasswordChange } = useAuthForm();
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        try {
+            const response = await axios.post(`${process.env.REACT_APP_LOCAL_URL}/auth/signup`, {
+                email,
+                password,
+            }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            if (response.status === 201) {
+                // 회원가입이 성공하면 /signin 경로로 이동
+                alert('가입성공')
+                navigator('/signin');
+            }
+        } catch (error) {
+            // 오류 처리 (예: 알림 표시)
+            console.error(error);
+
+        }
+    };
     return (
         <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
             <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -10,7 +37,7 @@ export default function SignUpForm() {
             </div>
 
             <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                <form className="space-y-6" action="#" method="POST">
+                <form className="space-y-6" onSubmit={handleSubmit}>
                     <div>
                         <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">이메일</label>
                         <div className="mt-2">
