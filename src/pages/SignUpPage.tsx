@@ -1,8 +1,8 @@
 import { SignUpForm } from "../components/index";
 
-const SignUp = () => {
+const SignUpPage = () => {
     return <SignUpForm></SignUpForm>
 }
 
-export default SignUp;
+export default SignUpPage;
 

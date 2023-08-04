@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import useAuthForm from '../hooks/useAuthForm';
+import useAuthForm from '../../hooks/useAuthForm';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 

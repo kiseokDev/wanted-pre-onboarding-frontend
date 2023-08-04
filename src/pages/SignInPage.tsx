@@ -1,10 +1,10 @@
 import { LoginForm } from "../components/index";
 
-const signIn = () => {
+const SignInPage = () => {
 
     return (
         <LoginForm></LoginForm>
     )
 }
 
-export default signIn;
+export default SignInPage;

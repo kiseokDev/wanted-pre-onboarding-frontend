@@ -1,4 +1,4 @@
-import { useAuthForm } from '../hooks';
+import { useAuthForm } from '../../hooks';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 

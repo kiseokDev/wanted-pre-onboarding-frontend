@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import { SignUp, SignIn, Todo } from './pages/index';
+import { SignUpPage, SignInPage, TodoPage } from './pages/index';
 
 
 
@@ -12,9 +12,9 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Navigate to="/signin" />} />
-        <Route path="/signin" element={token ? <Navigate to="/todo" /> : <SignIn />} />
-        <Route path="/signup" element={token ? <Navigate to="/todo" /> : <SignUp />} />
-        <Route path="/todo" element={!token ? <Navigate to="/signin" /> : <Todo />} />
+        <Route path="/signin" element={token ? <Navigate to="/todo" /> : <SignInPage />} />
+        <Route path="/signup" element={token ? <Navigate to="/todo" /> : <SignUpPage />} />
+        <Route path="/todo" element={!token ? <Navigate to="/signin" /> : <TodoPage />} />
       </Routes>
     </Router>
   );
