@@ -28,6 +28,8 @@ const TodoPage = () => {
 
     return (
         <div>
+            <input data-testid="new-todo-input" />
+            <button data-testid="new-todo-add-button">추가</button>
             <ul>
                 {todos.map((todo: TodoType, index) => (
                     <Todo key={index} todo={todo} />
