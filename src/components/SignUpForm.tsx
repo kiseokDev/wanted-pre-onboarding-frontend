@@ -19,12 +19,9 @@ export default function SignUpForm() {
                 },
             });
             if (response.status === 201) {
-                // 회원가입이 성공하면 /signin 경로로 이동
-                alert('가입성공')
                 navigator('/signin');
             }
         } catch (error) {
-            // 오류 처리 (예: 알림 표시)
             console.error(error);
 
         }

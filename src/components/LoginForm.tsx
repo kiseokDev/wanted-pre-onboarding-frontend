@@ -1,13 +1,33 @@
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import useAuthForm from '../hooks/useAuthForm';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const LoginForm = () => {
     const navigator = useNavigate();
 
     const { email, password, isFormValid, handleEmailChange, handlePasswordChange } = useAuthForm();
 
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        try {
+            const response = await axios.post(`${process.env.REACT_APP_LOCAL_URL}/auth/signin`, {
+                email,
+                password,
+            }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            if (response.status === 200) {
+                localStorage.setItem('jwt', response.data.access_token); // JWT를 로컬 스토리지에 저장
+                navigator('/todo');
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     return <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -16,7 +36,7 @@ const LoginForm = () => {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-            <form className="space-y-6" action="#" method="POST">
+            <form className="space-y-6" onSubmit={handleSubmit}>
                 <div>
                     <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">이메일</label>
                     <div className="mt-2">
