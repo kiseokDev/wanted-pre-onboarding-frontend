@@ -5,9 +5,9 @@ import { SignUpPage, SignInPage, TodoPage } from './pages/index';
 
 
 function App() {
-  const token = localStorage.getItem('jwt');
+  const token = localStorage.getItem('access_token');
   console.log(token);
-
+  alert('여기는 앱')
   return (
     <Router>
       <Routes>

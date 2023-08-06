@@ -1,28 +1,22 @@
 import { Link } from 'react-router-dom';
 import useAuthForm from '../../hooks/useAuthForm';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { useNavigate, redirect } from 'react-router-dom';
+import { AuthAPI } from '../../api';
 
 const LoginForm = () => {
     const navigator = useNavigate();
+    const api = new AuthAPI();
 
     const { email, password, isFormValid, handleEmailChange, handlePasswordChange } = useAuthForm();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
         try {
-            const response = await axios.post(`${process.env.REACT_APP_LOCAL_URL}/auth/signin`, {
-                email,
-                password,
-            }, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
+            const response = await api.signInApi({ email, password })
             if (response.status === 200) {
-                localStorage.setItem('jwt', response.data.access_token); // JWT를 로컬 스토리지에 저장
-                navigator('/todo');
+                localStorage.setItem('access_token', response.data.access_token); // JWT를 로컬 스토리지에 저장
+                redirect('/todo');
+                // navigator('/todo');
             }
         } catch (error) {
             console.error(error);
@@ -40,7 +34,7 @@ const LoginForm = () => {
                 <div>
                     <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">이메일</label>
                     <div className="mt-2">
-                        <input onChange={handleEmailChange} value={email} data-testid="email-input" placeholder="이메일" id="email" name="email" type="email" autoComplete="email" required className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                        <input onChange={handleEmailChange} value={email} data-testid="email-input" placeholder="이메일" id="email" name="email" type="text" autoComplete="email" required className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                     </div>
                 </div>
 
@@ -70,6 +64,8 @@ const LoginForm = () => {
             <p className="mt-10 text-center text-sm text-gray-500">
                 Don't have an account? <br />
                 <Link to="/signup" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">회원가입</Link>
+                <br></br>
+                <a onClick={() => navigator('/signin')} className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">내비</a>
             </p>
         </div>
     </div>
