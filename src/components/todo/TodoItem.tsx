@@ -50,16 +50,16 @@ export default function TodoItem({ todo, onDelete, onToggle, onUpdate }: IAppPro
     }
 
     return (
-        <li>
+        <li className="flex justify-between items-center bg-gray-200 my-2 p-2 rounded-md">
             {isEditing ? (
                 <>
-                    <input type="text" data-testid="modify-input" value={editText} onChange={handleChange} />
-                    <button data-testid="submit-button" onClick={handleSubmit}>제출</button>
-                    <button data-testid="cancel-button" onClick={handleCancel}>취소</button>
+                    <input className="p-2 rounded-md border border-gray-300 flex-grow mr-2" type="text" data-testid="modify-input" value={editText} onChange={handleChange} />
+                    <button className="bg-green-500 text-white p-2 rounded-md" data-testid="submit-button" onClick={handleSubmit}>제출</button>
+                    <button className="bg-red-500 text-white p-2 rounded-md ml-2" data-testid="cancel-button" onClick={handleCancel}>취소</button>
                 </>
             ) : (
                 <>
-                    <label>
+                    <label className="flex-grow">
                         <input
                             type="checkbox"
                             checked={todo.isCompleted}
@@ -67,8 +67,8 @@ export default function TodoItem({ todo, onDelete, onToggle, onUpdate }: IAppPro
                         />
                         <span>{todo.todo}</span>
                     </label>
-                    <button data-testid="modify-button" onClick={handleEdit}>수정</button>
-                    <button data-testid="delete-button" onClick={handleDelete}>삭제</button>
+                    <button className="bg-blue-500 text-white p-2 rounded-md" data-testid="modify-button" onClick={handleEdit}>수정</button>
+                    <button className="bg-red-500 text-white p-2 rounded-md ml-2" data-testid="delete-button" onClick={handleDelete}>삭제</button>
                 </>
             )}
         </li>
