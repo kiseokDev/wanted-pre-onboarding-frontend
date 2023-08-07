@@ -1,10 +1,8 @@
 import React, { useState } from 'react'
-import { TodoAPI } from '../../api';
-type OnInsertType = (newTodo: string, setNewTodo: React.Dispatch<React.SetStateAction<string>>) => void
+type OnInsertType = (newTodo: string, setNewTodo: React.Dispatch<React.SetStateAction<string>>) => void;
 
 export default function TodoInsert({ handleInsert }: { handleInsert: OnInsertType }) {
     const [newTodo, setNewTodo] = useState('');
-    const todoAPI = new TodoAPI();
 
     const handleKeyPress = (event: React.KeyboardEvent) => {
         if (event.key === 'Enter') {
@@ -21,6 +19,8 @@ export default function TodoInsert({ handleInsert }: { handleInsert: OnInsertTyp
                 onKeyDown={handleKeyPress}
                 placeholder="새로운 할 일 입력"
                 data-testid="new-todo-input"
+                autoComplete="off"
+                spellCheck="false"
             />
             <button
                 className="bg-green-500 text-white p-2 rounded-md"
