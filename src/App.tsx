@@ -1,13 +1,11 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import { SignUpPage, SignInPage, TodoPage } from './pages/index';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider, AuthContext } from './components';
+import { useContext } from 'react';
+import { SignInPage, SignUpPage, TodoPage } from './pages';
 
+const App: React.FC = () => {
+  const { token } = useContext(AuthContext);
 
-
-function App() {
-  const token = localStorage.getItem('access_token');
-  console.log(token);
-  alert('여기는 앱')
   return (
     <Router>
       <Routes>
@@ -20,5 +18,12 @@ function App() {
   );
 }
 
+const WrappedApp: React.FC = () => {
+  return (
+    <AuthProvider>
+      <App />
+    </AuthProvider>
+  );
+}
 
-export default App;
+export default WrappedApp;

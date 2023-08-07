@@ -2,10 +2,14 @@ import { Link } from 'react-router-dom';
 import useAuthForm from '../../hooks/useAuthForm';
 import { useNavigate, redirect } from 'react-router-dom';
 import { AuthAPI } from '../../api';
+import { useContext } from 'react';
+import { AuthContext } from '../../components';
+
 
 const LoginForm = () => {
-    const navigator = useNavigate();
+    const nav = useNavigate();
     const api = new AuthAPI();
+    const { setToken } = useContext(AuthContext);
 
     const { email, password, isFormValid, handleEmailChange, handlePasswordChange } = useAuthForm();
 
@@ -15,8 +19,8 @@ const LoginForm = () => {
             const response = await api.signInApi({ email, password })
             if (response.status === 200) {
                 localStorage.setItem('access_token', response.data.access_token); // JWT를 로컬 스토리지에 저장
-                redirect('/todo');
-                // navigator('/todo');
+                setToken(response.data.access_token); // 토큰 설정
+                nav('/todo')
             }
         } catch (error) {
             console.error(error);
@@ -64,8 +68,6 @@ const LoginForm = () => {
             <p className="mt-10 text-center text-sm text-gray-500">
                 Don't have an account? <br />
                 <Link to="/signup" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">회원가입</Link>
-                <br></br>
-                <a onClick={() => navigator('/signin')} className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">내비</a>
             </p>
         </div>
     </div>

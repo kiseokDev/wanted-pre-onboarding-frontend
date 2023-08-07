@@ -14,16 +14,14 @@ const TodoPage = () => {
         const fetchTodos = async () => {
             try {
                 const response = await todoAPI.getAllTodosApi(); // API 호출
-                setTodos(response.data); // 받아온 todos 데이터를 상태에 저장
+                setTodos(response.data);
             } catch (error) {
                 console.error(error);
-                // 오류 처리 (예: 알림 표시)
             }
         };
 
         fetchTodos();
     }, []);
-
 
     const handleInputChange = (e: any) => {
         setNewTodo(e.target.value);
@@ -31,26 +29,17 @@ const TodoPage = () => {
 
     const handleAddClick = async () => {
         if (newTodo.trim() === '') return; // Empty input handling
-
-        const token = localStorage.getItem('access_token'); // Assuming JWT is stored in local storage
-
         try {
-            // const response = await axios.post(`${process.env.REACT_APP_LOCAL_URL}/todos`, { todo: newTodo }, {
-            //     headers: {
-            //         'Authorization': `Bearer ${token}`,
-            //         'Content-Type': 'application/json',
-            //     },
-            // });
             const response = await todoAPI.createTodoApi({ todo: newTodo });
 
             if (response.status === 201) {
                 // setTodos([...todos, response.data]);
                 console.log(response.data)  //
-                setNewTodo('');
+                setNewTodo('')
+                setTodos([...todos, response.data]);
             }
         } catch (error) {
             console.error(error);
-            // Handle the error (e.g., show an error message)
         }
     };
 
