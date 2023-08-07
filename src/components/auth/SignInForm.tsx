@@ -1,31 +1,9 @@
 import { Link } from 'react-router-dom';
 import useAuthForm from '../../hooks/useAuthForm';
-import { useNavigate, redirect } from 'react-router-dom';
-import { AuthAPI } from '../../api';
-import { useContext } from 'react';
-import { AuthContext } from '../../components';
 
+export default function SignInForm() {
+    const { email, password, isFormValid, handleEmailChange, handlePasswordChange, handleSignInSubmit } = useAuthForm();
 
-const LoginForm = () => {
-    const nav = useNavigate();
-    const api = new AuthAPI();
-    const { setToken } = useContext(AuthContext);
-
-    const { email, password, isFormValid, handleEmailChange, handlePasswordChange } = useAuthForm();
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        try {
-            const response = await api.signInApi({ email, password })
-            if (response.status === 200) {
-                localStorage.setItem('access_token', response.data.access_token); // JWT를 로컬 스토리지에 저장
-                setToken(response.data.access_token); // 토큰 설정
-                nav('/todo')
-            }
-        } catch (error) {
-            console.error(error);
-        }
-    };
 
     return <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -34,7 +12,7 @@ const LoginForm = () => {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-            <form className="space-y-6" onSubmit={handleSubmit}>
+            <form className="space-y-6" onSubmit={handleSignInSubmit}>
                 <div>
                     <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">이메일</label>
                     <div className="mt-2">
@@ -73,4 +51,3 @@ const LoginForm = () => {
     </div>
 }
 
-export default LoginForm

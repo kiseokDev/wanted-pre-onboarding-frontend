@@ -1,25 +1,8 @@
 import { useAuthForm } from '../../hooks';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import { AuthAPI } from '../../api/auth';
+
 export default function SignUpForm() {
-    const navigator = useNavigate();
-    const api = new AuthAPI();
-    const { email, password, isFormValid, handleEmailChange, handlePasswordChange } = useAuthForm();
+    const { email, password, isFormValid, handleEmailChange, handlePasswordChange, handleSignUpSubmit } = useAuthForm();
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        try {
-            // const response = await axios.post(`${process.env.REACT_APP_LOC/AL_URL}/auth/signup`, {
-            const response = await api.signUpApi({ email, password });
-            if (response.status === 201) {
-                navigator('/signin');
-            }
-        } catch (error) {
-            console.error(error);
-
-        }
-    };
     return (
         <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
             <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -28,7 +11,7 @@ export default function SignUpForm() {
             </div>
 
             <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                <form className="space-y-6" onSubmit={handleSubmit}>
+                <form className="space-y-6" onSubmit={handleSignUpSubmit}>
                     <div>
                         <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">이메일</label>
                         <div className="mt-2">
