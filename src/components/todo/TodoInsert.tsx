@@ -1,29 +1,14 @@
 import React, { useState } from 'react'
-import { TodoType } from '../../types'
 import { TodoAPI } from '../../api';
-type OnInsertType = (todo: TodoType) => void
+type OnInsertType = (newTodo: string, setNewTodo: React.Dispatch<React.SetStateAction<string>>) => void
 
-export default function TodoInsert({ onInsert }: { onInsert: OnInsertType }) {
+export default function TodoInsert({ handleInsert }: { handleInsert: OnInsertType }) {
     const [newTodo, setNewTodo] = useState('');
     const todoAPI = new TodoAPI();
 
-    const handleAddClick = async () => {
-        if (newTodo.trim() === '') return; // Empty input handling
-        try {
-            const response = await todoAPI.createTodoApi({ todo: newTodo });
-
-            if (response.status === 201) {
-                setNewTodo('')
-                onInsert(response.data)
-            }
-        } catch (error) {
-            console.error(error);
-        }
-    }
-
     const handleKeyPress = (event: React.KeyboardEvent) => {
         if (event.key === 'Enter') {
-            handleAddClick();
+            handleInsert(newTodo, setNewTodo);
         }
     }
 
@@ -39,7 +24,7 @@ export default function TodoInsert({ onInsert }: { onInsert: OnInsertType }) {
             />
             <button
                 className="bg-green-500 text-white p-2 rounded-md"
-                onClick={handleAddClick}
+                onClick={() => handleInsert(newTodo, setNewTodo)}
                 data-testid="new-todo-add-button"
             >
                 추가

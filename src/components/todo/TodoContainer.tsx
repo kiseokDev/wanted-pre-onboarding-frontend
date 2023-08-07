@@ -83,41 +83,38 @@ import { useState } from "react";
 import { TodoType } from "../../types";
 import TodoEdit from "./TodoEdit";
 import TodoItem from "./TodoItem";
-import { TodoAPI } from "../../api";
-import { useTodo } from "../../hooks";
 
 interface IAppProps {
     todo: TodoType;
-    onDelete: (id: number) => void;
-    onToggle: (id: number) => void;
-    onUpdate: (todo: TodoType) => void;
+
+    handleToggle: (todo: TodoType) => void;
+    handleUpdate: (editText: string, todo: TodoType, setIsEditing: React.Dispatch<React.SetStateAction<boolean>>) => void;
+    handleDelete: (todo: TodoType) => void
 }
 
-export default function TodoContainer({ todo, onDelete, onToggle, onUpdate }: IAppProps) {
-    const { isEditing, handleEdit, handleCancel, handleToggle, handleSubmit } = useTodo(todo, onToggle, onUpdate);
+export default function TodoContainer({ todo, handleUpdate, handleToggle, handleDelete }: IAppProps) {
+    const [isEditing, setIsEditing] = useState(false);
 
-
-
+    const handleEdit = () => setIsEditing(true);
+    const handleCancel = () => setIsEditing(false);
     return (
         <li className="flex justify-between items-center bg-gray-200 my-2 p-2 rounded-md">
             {isEditing ? (
                 <TodoEdit
                     todo={todo}
-                    onUpdate={onUpdate}
                     handleCanel={handleCancel}
-                    handleSubmit={handleSubmit}
+                    handleUpdate={handleUpdate}
+                    setIsEditing={setIsEditing}
 
                 />
             ) : (
                 <TodoItem
                     todo={todo}
                     handleToggle={handleToggle}
-                    onDelete={onDelete}
+                    handleDelete={handleDelete}
                     handleEdit={handleEdit}
                 />
             )}
         </li>
     );
 }
-
-

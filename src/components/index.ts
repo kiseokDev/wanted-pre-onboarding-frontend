@@ -3,4 +3,3 @@ export {AuthContext} from "./common/contextAPI/AuthContext";
 export {default as LoginForm} from "./auth/LoginForm";
 export {default as SignUpForm} from "./auth/SignUpForm";
 export {default as TodoList} from "./todo/TodoList";
-// export {default as TodoContainer} from "./todo/TodoContainer";

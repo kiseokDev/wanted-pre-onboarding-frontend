@@ -57,7 +57,6 @@ export function addTodo(todo: TodoType): AddTodoAction {
   };
 }
 export function toggleTodo(id: number): ToggleTodoAction {
-  console.log("toggle");
   return {
     type: TOGGLE_TODO,
     id,

@@ -25,9 +25,11 @@ export default function useReducerHook(): UseReducerHookType {
   const onToggle = (id: number) => {
     dispatch(toggleTodo(id));
   };
+
   const onDelete = (id: number) => {
     dispatch(deleteTodo(id));
   };
+
   const onUpdate = (todo: TodoType) => {
     dispatch(updateTodo(todo));
   };
