@@ -1,7 +1,10 @@
 import React, { useState } from 'react'
-type OnInsertType = (newTodo: string, setNewTodo: React.Dispatch<React.SetStateAction<string>>) => void;
+type OnInsertType = {
+    handleInsert: (newTodo: string, setNewTodo: React.Dispatch<React.SetStateAction<string>>) => void;
 
-export default function TodoInsert({ handleInsert }: { handleInsert: OnInsertType }) {
+}
+
+export default function TodoInsert({ handleInsert }: OnInsertType) {
     const [newTodo, setNewTodo] = useState('');
 
     const handleKeyPress = (event: React.KeyboardEvent) => {

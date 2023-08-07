@@ -1,17 +1,8 @@
 import {useReducer} from "react";
 import {addTodo, deleteTodo, todoReducer, toggleTodo, updateTodo, initTodo} from "../features";
-import {TodoType} from "../types";
+import {TodoType, UseTodoReducerHookType} from "../types";
 
-type UseReducerHookType = [
-  todos: TodoType[],
-  onInit: (todos: TodoType[]) => void,
-  onInsert: (todo: TodoType) => void,
-  onToggle: (id: number) => void,
-  onDelete: (id: number) => void,
-  onUpdate: (todo: TodoType) => void
-];
-
-export default function useReducerHook(): UseReducerHookType {
+export default function useReducerHook(): UseTodoReducerHookType {
   const [todos, dispatch] = useReducer(todoReducer, []);
 
   const onInit = (todos: TodoType[]) => {

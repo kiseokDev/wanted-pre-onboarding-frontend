@@ -2,14 +2,14 @@ import { useEffect, useRef, useState } from "react";
 import { TodoAPI } from "../../api";
 import { TodoType } from "../../types";
 
-interface IAppProps {
+interface Props {
     todo: TodoType;
     handleCanel: () => void;
     handleUpdate: (editText: string, todo: TodoType, setIsEditing: React.Dispatch<React.SetStateAction<boolean>>) => void;
     setIsEditing: React.Dispatch<React.SetStateAction<boolean>>
 
 }
-export default function TodoEdit({ todo, handleCanel, handleUpdate, setIsEditing }: IAppProps) {
+export default function TodoEdit({ todo, handleCanel, handleUpdate, setIsEditing }: Props) {
     const [editText, setEditText] = useState(todo.todo);
     const inputRef = useRef<HTMLInputElement>(null);
 

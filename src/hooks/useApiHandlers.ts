@@ -1,17 +1,9 @@
 import React, {useEffect, useState} from "react";
 import {TodoAPI} from "../api/";
 import useReducerHook from "./useReducerHook";
-import {TodoType} from "../types";
+import {TodoType, UseTodoApiHandlerHookType} from "../types";
 
-type UseApiHandlerHookType = [
-  todos: TodoType[],
-  useHandleInit: () => void,
-  handleInsert: (newTodo: string, setNewTodo: React.Dispatch<React.SetStateAction<string>>) => void,
-  handleToggle: (todo: TodoType) => void,
-  handleUpdate: (editText: string, todo: TodoType, setIsEditing: React.Dispatch<React.SetStateAction<boolean>>) => void,
-  handleDelete: (todo: TodoType) => void
-];
-export default function useApiHandlerHook(): UseApiHandlerHookType {
+export default function useApiHandlerHook(): UseTodoApiHandlerHookType {
   const [todos, onInit, onInsert, onToggle, onDelete, onUpdate] = useReducerHook();
   const api = new TodoAPI();
 
