@@ -8,12 +8,14 @@ type ActionType =
   | {type: "TOGGLE_TODO"; id: number}
   | {type: "ADD_TODO"; todo: TodoType}
   | {type: "DELETE_TODO"; id: number}
-  | {type: "RESET"; todos: TodoType[]};
+  | {type: "RESET"; todos: TodoType[]}
+  | {type: "UPDATE_TODO"; todo: TodoType};
 
 export function todoReducer(state: TodoType[], action: ActionType): TodoType[] {
   switch (action.type) {
+    case "UPDATE_TODO":
+      return state.map((todo) => (todo.id === action.todo.id ? {...todo, todo: action.todo.todo} : todo));
     case "TOGGLE_TODO":
-      // return state.find
       return state.map((todo) => (todo.id === action.id ? {...todo, isCompleted: !todo.isCompleted} : todo));
     case "ADD_TODO":
       return [...state, action.todo];
@@ -39,6 +41,11 @@ type DeleteTodoAction = {
   id: number;
 };
 
+type UpdateTodoAction = {
+  type: "UPDATE_TODO";
+  todo: TodoType;
+};
+
 export function addTodo(todo: TodoType): AddTodoAction {
   return {
     type: ADD_TODO,
@@ -56,5 +63,12 @@ export function deleteTodo(id: number): DeleteTodoAction {
   return {
     type: DELETE_TODO,
     id,
+  };
+}
+
+export function updateTodo(todo: TodoType): UpdateTodoAction {
+  return {
+    type: "UPDATE_TODO",
+    todo,
   };
 }

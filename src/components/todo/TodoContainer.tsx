@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer, useState } from 'react'
-import { addTodo, deleteTodo, todoReducer, toggleTodo } from '../../features';
+import { addTodo, deleteTodo, todoReducer, toggleTodo, updateTodo } from '../../features';
 import { TodoAPI } from '../../api';
 import { TodoType } from '../../types';
 import TodoInsert from './TodoInsert';
@@ -38,13 +38,16 @@ export default function TodoContainer() {
         dispatch(deleteTodo(id));
     };
 
+    const onUpdate = (todo: TodoType) => {
+        dispatch(updateTodo(todo));
+    }
     return (
         <div>
             <TodoInsert onInsert={onInsert} />
 
             <ul>
                 {todos.map((todo: TodoType, index) => (
-                    <TodoItem key={index} todo={todo} onToggle={onToggle} onDelete={onDelete} />
+                    <TodoItem key={index} todo={todo} onUpdate={onUpdate} onToggle={onToggle} onDelete={onDelete} />
                 ))}
             </ul>
         </div >
