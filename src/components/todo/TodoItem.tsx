@@ -10,28 +10,35 @@ interface IAppProps {
 
 
 export default function TodoItem({ todo, onDelete, onToggle }: IAppProps) {
-    const [isChecked, setIsChecked] = useState(todo.isCompleted);
     const api = new TodoAPI();
     const handleToggle = async () => {
-        const resposnt = await api.updateTodoApi(todo.id, { todo: todo.todo, isCompleted: !todo.isCompleted });
-        if (resposnt.status === 200) {
+        const response = await api.updateTodoApi(todo.id, { todo: todo.todo, isCompleted: !todo.isCompleted });
+        if (response.status === 200) {
             onToggle(todo.id);
-            setIsChecked(!isChecked);
+            // setIsChecked(!isChecked);
         }
 
     }
 
+    const handleDelete = async () => {
+        const response = await api.deleteTodoApi(todo.id);
+        if (response.status === 204) {
+            onDelete(todo.id);
+        }
+    }
     return (
         <li>
             <label>
                 {/* <input type="checkbox" checked={todo.isCompleted} onChange={() => console.log("check")} /> */}
                 <input
                     type="checkbox"
-                    checked={isChecked}
+                    checked={todo.isCompleted}
                     onChange={handleToggle}
                 />
                 <span>{todo.todo}</span>
             </label>
+            <button data-testid="modify-button">수정</button>
+            <button data-testid="delete-button" onClick={handleDelete}>삭제</button>
         </li>
     )
 }
