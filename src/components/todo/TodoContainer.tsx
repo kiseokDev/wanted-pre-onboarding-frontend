@@ -1,55 +1,123 @@
-import React, { useEffect, useReducer, useState } from 'react'
-import { addTodo, deleteTodo, todoReducer, toggleTodo, updateTodo } from '../../features';
-import { TodoAPI } from '../../api';
-import { TodoType } from '../../types';
-import TodoInsert from './TodoInsert';
-import TodoItem from './TodoItem';
+// import { useState } from "react";
+// import { TodoAPI } from "../../api";
+// import { TodoType } from "../../types";
+// import TodoEdit from "./TodoEdit";
+// import TodoItem from "./TodoItem";
 
-export default function TodoContainer() {
-    const [todos, dispatch] = useReducer(todoReducer, []);
-    const [isLoaded, setIsLoaded] = useState(false);
-    const todoAPI = new TodoAPI();
+// interface IAppProps {
+//     todo: TodoType;
+//     onDelete: (id: number) => void;
+//     onToggle: (id: number) => void;
+//     onUpdate: (todo: TodoType) => void;
+// }
 
-    useEffect(() => {
-        (async () => {
-            try {
-                const response = await todoAPI.getAllTodosApi(); // API 호출
-                dispatch({ type: 'RESET', todos: response.data });
-                setIsLoaded(true);
-            } catch (error) {
-                console.error(error);
-            }
-        })();
-    }, []);
+// export default function TodoContainer({ todo, onDelete, onToggle, onUpdate }: IAppProps) {
+//     const api = new TodoAPI();
+//     const [isEditing, setIsEditing] = useState(false);
+//     const [editText, setEditText] = useState(todo.todo);
 
-    // todos가 아직 정의되지 않았다면 로딩중임을 표시
-    if (!isLoaded) {
-        return <div>Loading...</div>;
-    }
+//     const handleToggle = async () => {
+//         const response = await api.updateTodoApi(todo.id, { todo: todo.todo, isCompleted: !todo.isCompleted });
+//         if (response.status === 200) {
+//             onToggle(response.data.id);
+//         }
+//     }
 
-    const onInsert = (todo: TodoType) => {
-        dispatch(addTodo(todo));
-    };
+//     const handleDelete = async () => {
+//         const response = await api.deleteTodoApi(todo.id);
+//         if (response.status === 204) {
+//             onDelete(todo.id);
+//         }
+//     }
 
-    const onToggle = (id: number) => {
-        dispatch(toggleTodo(id));
-    };
-    const onDelete = (id: number) => {
-        dispatch(deleteTodo(id));
-    };
+//     const handleEdit = () => {
+//         setIsEditing(true);
+//     }
 
-    const onUpdate = (todo: TodoType) => {
-        dispatch(updateTodo(todo));
-    }
+//     const handleCancel = () => {
+//         setIsEditing(false);
+//         setEditText(todo.todo);
+//     }
+
+//     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+//         setEditText(event.target.value);
+//     }
+
+//     const handleSubmit = async () => {
+//         const response = await api.updateTodoApi(todo.id, { todo: editText, isCompleted: todo.isCompleted });
+//         if (response.status === 200) {
+//             onUpdate(response.data);
+//             setIsEditing(false);
+//         }
+//     }
+
+//     return (
+//         <li className="flex justify-between items-center bg-gray-200 my-2 p-2 rounded-md">
+//             {isEditing ? (
+//                 <>
+//                     <input className="p-2 rounded-md border border-gray-300 flex-grow mr-2" type="text" data-testid="modify-input" value={editText} onChange={handleChange} />
+//                     <button className="bg-green-500 text-white p-2 rounded-md" data-testid="submit-button" onClick={handleSubmit}>제출</button>
+//                     <button className="bg-red-500 text-white p-2 rounded-md ml-2" data-testid="cancel-button" onClick={handleCancel}>취소</button>
+//                 </>
+//                 // <TodoEdit></TodoEdit>
+//             ) : (
+//                 <>
+//                     <label className="flex-grow">
+//                         <input
+//                             type="checkbox"
+//                             checked={todo.isCompleted}
+//                             onChange={handleToggle}
+//                         />
+//                         <span>{todo.todo}</span>
+//                     </label>
+//                     <button className="bg-blue-500 text-white p-2 rounded-md" data-testid="modify-button" onClick={handleEdit}>수정</button>
+//                     <button className="bg-red-500 text-white p-2 rounded-md ml-2" data-testid="delete-button" onClick={handleDelete}>삭제</button>
+//                 </>
+//                 // <TodoItem></TodoItem>
+//             )}
+//         </li>
+//     )
+// }
+
+import { useState } from "react";
+import { TodoType } from "../../types";
+import TodoEdit from "./TodoEdit";
+import TodoItem from "./TodoItem";
+import { TodoAPI } from "../../api";
+import { useTodo } from "../../hooks";
+
+interface IAppProps {
+    todo: TodoType;
+    onDelete: (id: number) => void;
+    onToggle: (id: number) => void;
+    onUpdate: (todo: TodoType) => void;
+}
+
+export default function TodoContainer({ todo, onDelete, onToggle, onUpdate }: IAppProps) {
+    const { isEditing, handleEdit, handleCancel, handleToggle, handleSubmit } = useTodo(todo, onToggle, onUpdate);
+
+
+
     return (
-        <div>
-            <TodoInsert onInsert={onInsert} />
+        <li className="flex justify-between items-center bg-gray-200 my-2 p-2 rounded-md">
+            {isEditing ? (
+                <TodoEdit
+                    todo={todo}
+                    onUpdate={onUpdate}
+                    handleCanel={handleCancel}
+                    handleSubmit={handleSubmit}
 
-            <ul>
-                {todos.map((todo: TodoType, index) => (
-                    <TodoItem key={index} todo={todo} onUpdate={onUpdate} onToggle={onToggle} onDelete={onDelete} />
-                ))}
-            </ul>
-        </div >
+                />
+            ) : (
+                <TodoItem
+                    todo={todo}
+                    handleToggle={handleToggle}
+                    onDelete={onDelete}
+                    handleEdit={handleEdit}
+                />
+            )}
+        </li>
     );
 }
+
+

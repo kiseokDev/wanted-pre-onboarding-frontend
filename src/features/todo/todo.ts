@@ -4,11 +4,11 @@ const TOGGLE_TODO = "TOGGLE_TODO";
 const ADD_TODO = "ADD_TODO";
 const DELETE_TODO = "DELETE_TODO";
 
-type ActionType =
+export type ActionType =
   | {type: "TOGGLE_TODO"; id: number}
   | {type: "ADD_TODO"; todo: TodoType}
   | {type: "DELETE_TODO"; id: number}
-  | {type: "RESET"; todos: TodoType[]}
+  | {type: "INIT_TODO"; todos: TodoType[]}
   | {type: "UPDATE_TODO"; todo: TodoType};
 
 export function todoReducer(state: TodoType[], action: ActionType): TodoType[] {
@@ -21,7 +21,7 @@ export function todoReducer(state: TodoType[], action: ActionType): TodoType[] {
       return [...state, action.todo];
     case "DELETE_TODO":
       return state.filter((todo) => todo.id !== action.id);
-    case "RESET":
+    case "INIT_TODO":
       return action.todos;
     default:
       return state;
@@ -44,6 +44,10 @@ type DeleteTodoAction = {
 type UpdateTodoAction = {
   type: "UPDATE_TODO";
   todo: TodoType;
+};
+type InitTodoAction = {
+  type: "INIT_TODO";
+  todos: TodoType[];
 };
 
 export function addTodo(todo: TodoType): AddTodoAction {
@@ -70,5 +74,12 @@ export function updateTodo(todo: TodoType): UpdateTodoAction {
   return {
     type: "UPDATE_TODO",
     todo,
+  };
+}
+
+export function initTodo(todos: TodoType[]): InitTodoAction {
+  return {
+    type: "INIT_TODO",
+    todos,
   };
 }

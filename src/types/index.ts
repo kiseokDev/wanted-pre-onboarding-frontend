@@ -1,1 +1,1 @@
-export type {default as TodoType} from "./todo";
+export type { default as TodoType } from "./todo";

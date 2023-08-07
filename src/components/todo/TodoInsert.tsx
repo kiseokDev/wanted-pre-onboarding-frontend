@@ -6,6 +6,7 @@ type OnInsertType = (todo: TodoType) => void
 export default function TodoInsert({ onInsert }: { onInsert: OnInsertType }) {
     const [newTodo, setNewTodo] = useState('');
     const todoAPI = new TodoAPI();
+
     const handleAddClick = async () => {
         if (newTodo.trim() === '') return; // Empty input handling
         try {
@@ -19,12 +20,20 @@ export default function TodoInsert({ onInsert }: { onInsert: OnInsertType }) {
             console.error(error);
         }
     }
+
+    const handleKeyPress = (event: React.KeyboardEvent) => {
+        if (event.key === 'Enter') {
+            handleAddClick();
+        }
+    }
+
     return (
         <div className="flex items-center bg-gray-200 p-2 rounded-md shadow-sm my-2">
             <input
                 className="flex-grow p-2 rounded-md border border-gray-300 mr-2"
                 value={newTodo}
                 onChange={(e) => setNewTodo(e.target.value)}
+                onKeyDown={handleKeyPress}
                 placeholder="새로운 할 일 입력"
                 data-testid="new-todo-input"
             />
