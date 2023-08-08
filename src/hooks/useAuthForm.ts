@@ -3,6 +3,7 @@ import {validateForm} from "../features";
 import {AuthAPI} from "../api";
 import {useNavigate} from "react-router-dom";
 import {AuthContext} from "../components";
+import axios, {AxiosError} from "axios";
 
 export default function useAuthForm() {
   const api = new AuthAPI();
@@ -33,7 +34,12 @@ export default function useAuthForm() {
         navigator("/signin");
       }
     } catch (error) {
-      console.error(error);
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 400) {
+          // 동일한 메일 존재시 alert
+          alert(error.response.data.message);
+        }
+      }
     }
   };
 
@@ -47,7 +53,15 @@ export default function useAuthForm() {
         navigator("/todo");
       }
     } catch (error) {
-      console.error(error);
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 401) {
+          // 비밀번호 오류
+          alert("이메일 혹은 비밀번호 오류");
+        } else if (error.response?.status === 404 && error.response.data.message === "해당 사용자가 존재하지 않습니다.") {
+          // alert("해당 사용자가 존재하지 않습니다.");
+          alert("이메일 혹은 비밀번호 오류");
+        }
+      }
     }
   };
 
