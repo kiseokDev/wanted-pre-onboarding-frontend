@@ -32,7 +32,7 @@ export default function SignUpForm() {
                     <div>
                         <button
                             disabled={!isFormValid}
-                            data-testid="signin-button"
+                            data-testid="signup-button"
                             className={`flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 shadow-sm 
                      ${isFormValid ? "bg-indigo-600 text-white hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" : "bg-gray-400 cursor-not-allowed"}`}
                         >회원가입</button>
