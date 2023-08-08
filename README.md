@@ -10,5 +10,4 @@
 4. 프로젝트를 실행합니다: `npm start` 또는 `yarn start`
 
 ## 데모 영상 (또는 배포 링크)
-배포 사이트 : 
-# https://wanted-pre-onboarding-frontend-1nvegzzi0-kiseokdev.vercel.app/
+###  배포 링크 : https://wanted-pre-onboarding-frontend-1nvegzzi0-kiseokdev.vercel.app/
