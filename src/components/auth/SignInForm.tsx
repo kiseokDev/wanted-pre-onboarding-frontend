@@ -1,33 +1,9 @@
 import { Link } from 'react-router-dom';
-import useAuthForm from '../hooks/useAuthForm';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import useAuthForm from '../../hooks/useAuthForm';
 
-const LoginForm = () => {
-    const navigator = useNavigate();
+export default function SignInForm() {
+    const { email, password, isFormValid, handleEmailChange, handlePasswordChange, handleSignInSubmit } = useAuthForm();
 
-    const { email, password, isFormValid, handleEmailChange, handlePasswordChange } = useAuthForm();
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-
-        try {
-            const response = await axios.post(`${process.env.REACT_APP_LOCAL_URL}/auth/signin`, {
-                email,
-                password,
-            }, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-            if (response.status === 200) {
-                localStorage.setItem('jwt', response.data.access_token); // JWT를 로컬 스토리지에 저장
-                navigator('/todo');
-            }
-        } catch (error) {
-            console.error(error);
-        }
-    };
 
     return <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -36,11 +12,11 @@ const LoginForm = () => {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-            <form className="space-y-6" onSubmit={handleSubmit}>
+            <form className="space-y-6" onSubmit={handleSignInSubmit}>
                 <div>
                     <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">이메일</label>
                     <div className="mt-2">
-                        <input onChange={handleEmailChange} value={email} data-testid="email-input" placeholder="이메일" id="email" name="email" type="email" autoComplete="email" required className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                        <input onChange={handleEmailChange} value={email} data-testid="email-input" placeholder="이메일" id="email" name="email" type="text" autoComplete="email" required className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                     </div>
                 </div>
 
@@ -48,7 +24,6 @@ const LoginForm = () => {
                     <div className="flex items-center justify-between">
                         <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">비밀번호</label>
                         <div className="text-sm">
-                            {/* <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">Forgot password?</a> */}
                         </div>
                     </div>
                     <div className="mt-2">
@@ -75,4 +50,3 @@ const LoginForm = () => {
     </div>
 }
 
-export default LoginForm
