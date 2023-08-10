@@ -1,3 +1,4 @@
+import {Matcher, MatcherOptions} from "@testing-library/react";
 import nock from "nock";
 
 export const testApiDefaultOption = nock("http://localhost:8000")
@@ -52,3 +53,5 @@ export const incorrectEmail = {
   email: "13213213@123123",
   password: "123123123",
 };
+
+export type GetTestId = (id: Matcher, options?: MatcherOptions | undefined) => HTMLElement;

@@ -3,7 +3,6 @@ import { Navigate, Route, Router, Routes } from "react-router-dom";
 import { SignInPage, TodoPage } from "../../pages";
 import { correctEmail, incorrectEmail, setupApiForSignIn } from "./util";
 import { createMemoryHistory } from 'history';
-import nock from 'nock';
 
 let getByTestId: (id: Matcher, options?: MatcherOptions | undefined) => HTMLElement
 const history = createMemoryHistory({ initialEntries: ['/signin'] });
