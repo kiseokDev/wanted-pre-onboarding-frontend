@@ -16,7 +16,7 @@ export function createAPI(): AxiosInstance {
       return response;
     },
     function (error: AxiosError) {
-      console.log("Error", error.message);
+      console.error("Error", error.message);
       return Promise.reject(error);
     }
   );

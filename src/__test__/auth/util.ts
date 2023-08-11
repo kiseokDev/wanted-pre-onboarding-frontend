@@ -54,4 +54,4 @@ export const incorrectEmail = {
   password: "123123123",
 };
 
-export type GetTestId = (id: Matcher, options?: MatcherOptions | undefined) => HTMLElement;
+export type GetByTestId = (id: Matcher, options?: MatcherOptions | undefined) => HTMLElement;

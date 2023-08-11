@@ -1,10 +1,9 @@
-import { type } from 'os'
-import React from 'react'
+import { useState } from 'react'
 
 type CounterHook = { count: number, decreaseCount: () => void, increaseCount: () => void }
 
 export function useCounter(): CounterHook {
-    const [count, setCount] = React.useState(0)
+    const [count, setCount] = useState(0)
 
     const decreaseCount = () => setCount(count - 1)
     const increaseCount = () => setCount(count + 1)

@@ -7,6 +7,7 @@ import { createMemoryHistory } from 'history';
 let getByTestId: (id: Matcher, options?: MatcherOptions | undefined) => HTMLElement
 const history = createMemoryHistory({ initialEntries: ['/signin'] });
 
+
 beforeEach(() => {
     const result = render(
         <Router navigator={history} location={history.location}>
@@ -22,12 +23,14 @@ beforeEach(() => {
 
 
 describe("로그인 테스트", () => {
-    beforeAll(() => {
+    beforeEach(() => {
+        jest.spyOn(window, 'alert').mockImplementation(() => { });
         jest.spyOn(console, 'error').mockImplementation(() => { });
-        jest.spyOn(window, 'alert').mockImplementation(() => { return "이메일 혹은 비밀번호 오류" });
-    })
+    });
 
-
+    afterEach(() => {
+        (console.error as jest.Mock).mockRestore();
+    });
     it("이메일에 '@'가 포함되지 않으면 로그인 버튼이 비활성화된다", () => {
         // Given
         const emailInput = getByTestId("email-input");
@@ -89,6 +92,5 @@ describe("로그인 테스트", () => {
         await waitFor(() => expect(localStorage.getItem("access_token")).toEqual("token"));
         expect(history.location.pathname).toBe('/todo');
     });
-
 
 });
