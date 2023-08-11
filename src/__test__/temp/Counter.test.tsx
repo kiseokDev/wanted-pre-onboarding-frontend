@@ -1,6 +1,6 @@
 import { act, render, renderHook } from "@testing-library/react";
 import Counter, { useCounter } from "./Counter";
-import { GetByTestId } from "./auth/util";
+import { GetByTestId } from "../auth/util";
 
 describe("Counter 커스텀훅 테스트", () => {
     let result: { current: ReturnType<typeof useCounter> };
