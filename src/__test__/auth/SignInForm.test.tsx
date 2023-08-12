@@ -1,8 +1,11 @@
 import { render, fireEvent, act, waitFor, Matcher, MatcherOptions } from "@testing-library/react";
-import { Navigate, Route, Router, Routes } from "react-router-dom";
+import { MemoryRouter, Navigate, Route, Router, Routes } from "react-router-dom";
 import { SignInPage, TodoPage } from "../../pages";
 import { correctEmail, incorrectEmail, setupApiForSignIn } from "./util";
 import { createMemoryHistory } from 'history';
+import { AuthProvider } from "../../components";
+import { AppRoutes } from "../../App";
+import { get } from "http";
 
 let getByTestId: (id: Matcher, options?: MatcherOptions | undefined) => HTMLElement
 const history = createMemoryHistory({ initialEntries: ['/signin'] });
@@ -10,13 +13,11 @@ const history = createMemoryHistory({ initialEntries: ['/signin'] });
 
 beforeEach(() => {
     const result = render(
-        <Router navigator={history} location={history.location}>
-            <Routes>
-                <Route path="/" element={<Navigate to="/signin" />} />
-                <Route path="/signin" element={<SignInPage />} />
-                <Route path="/todo" element={<TodoPage />} />
-            </Routes>
-        </Router>
+        <AuthProvider>
+            <MemoryRouter initialEntries={['/signin']}>
+                <AppRoutes />
+            </MemoryRouter>
+        </AuthProvider>
     );
     getByTestId = result.getByTestId;
 });
@@ -89,8 +90,8 @@ describe("로그인 테스트", () => {
         });
 
         // Then
-        await waitFor(() => expect(localStorage.getItem("access_token")).toEqual("token"));
-        expect(history.location.pathname).toBe('/todo');
+        await waitFor(() => expect(localStorage.getItem("access_token")).toEqual("token"))
+        expect(getByTestId("new-todo-input")).toBeInTheDocument();
     });
-
 });
+

@@ -1,7 +1,9 @@
 import { Matcher, MatcherOptions, fireEvent, render, waitFor } from "@testing-library/react";
 import { act } from "react-dom/test-utils";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { BrowserRouter, MemoryRouter, Navigate, Route, Routes } from "react-router-dom";
 import { SignInPage, SignUpPage } from "../../pages";
+import { AuthProvider } from "../../components";
+import { AppRoutes } from "../../App";
 
 
 describe("회원가입 실패 테스트", () => {
@@ -10,13 +12,11 @@ describe("회원가입 실패 테스트", () => {
         jest.spyOn(window, 'alert').mockImplementation(() => { });
         jest.spyOn(console, 'error').mockImplementation(() => { });
         getByTestId = render(
-            <BrowserRouter>
-                <Routes>
-                    <Route path="/" element={<Navigate to="/signup" />} />
-                    <Route path="/signin" element={<SignInPage />} />
-                    <Route path="/signup" element={<SignUpPage />} />
-                </Routes>
-            </BrowserRouter>
+            <AuthProvider>
+                <MemoryRouter initialEntries={['/signup']}>
+                    <AppRoutes />
+                </MemoryRouter>
+            </AuthProvider>
         ).getByTestId
     });
     // it("회원가입 페이지에서 버튼을 클릭 시 회원가입을 진행하고 회원가입이 정상적으로 완료되엇을 시 /signin 페이지로 이동한다", async () => {
