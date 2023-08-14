@@ -1,51 +1,33 @@
 import {Matcher, MatcherOptions} from "@testing-library/react";
 import nock from "nock";
 
-export const testApiDefaultOption = nock("http://localhost:8000")
-  .defaultReplyHeaders({
-    "access-control-allow-origin": "*",
-    "access-control-allow-credentials": "true",
-  })
-  .options("/auth/signin")
-  .reply(
-    200,
-    {},
-    {
-      "Access-Control-Allow-Origin": "*",
+export const testMockApiDefaultOption = (url: string) =>
+  nock("http://localhost:8000")
+    .defaultReplyHeaders({
+      "access-control-allow-origin": "*",
+      "access-control-allow-credentials": "true",
       "Access-Control-Allow-Methods": "POST, GET, PUT, DELETE, OPTIONS",
       "Access-Control-Allow-Headers": "Content-Type, Authorization",
-    }
-  );
+    })
+    .options(url)
+    .reply(200);
 
-type StatusCode = 200 | 201 | 400 | 401 | 403 | 404 | 500;
-export const setupApiForSignIn = (email: string, password: string, status: StatusCode) => {
-  // Handle OPTIONS (preflight) request
-  testApiDefaultOption.options("/auth/signin").reply(
-    200,
-    {},
-    {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "POST, GET, PUT, DELETE, OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type, Authorization, accept, content-type, authorization",
-    }
-  );
-
+export const setupApiForSignIn = (email: string, password: string, status: 404 | 200) => {
   if (status === 404) {
-    // testApiDefaultOption.post("/auth/signin", {email, password}).reply(401, {
-    testApiDefaultOption
-      .post("/auth/signin", (body) => body.email && body.password)
+    testMockApiDefaultOption("/auth/signin")
+      .post("/auth/signin", {email, password}) // this accurs error
       .reply(404, {
         statusCode: 404,
         message: "해당 사용자가 존재하지 않습니다.",
         error: "Not Found",
       });
   } else if (status === 200) {
-    testApiDefaultOption.post("/auth/signin", (body) => body.email && body.password).reply(200, {access_token: "token"});
+    testMockApiDefaultOption("/auth/signin").post("/auth/signin", {email, password}).reply(200, {access_token: "token"});
   }
 };
 
 export const correctEmail = {
-  email: "correct@gmail.com",
+  email: "test1234@gmail.com",
   password: "12345678",
 };
 

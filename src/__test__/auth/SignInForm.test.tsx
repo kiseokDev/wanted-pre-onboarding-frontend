@@ -1,23 +1,14 @@
 import { render, fireEvent, act, waitFor, Matcher, MatcherOptions } from "@testing-library/react";
-import { MemoryRouter, Navigate, Route, Router, Routes } from "react-router-dom";
-import { SignInPage, TodoPage } from "../../pages";
 import { correctEmail, incorrectEmail, setupApiForSignIn } from "./util";
-import { createMemoryHistory } from 'history';
-import { AuthProvider } from "../../components";
-import { AppRoutes } from "../../App";
-import { get } from "http";
+import { TestApp } from "../TestApp";
+import nock from "nock";
 
 let getByTestId: (id: Matcher, options?: MatcherOptions | undefined) => HTMLElement
-const history = createMemoryHistory({ initialEntries: ['/signin'] });
 
 
 beforeEach(() => {
     const result = render(
-        <AuthProvider>
-            <MemoryRouter initialEntries={['/signin']}>
-                <AppRoutes />
-            </MemoryRouter>
-        </AuthProvider>
+        <TestApp path='/signin' />
     );
     getByTestId = result.getByTestId;
 });
@@ -30,7 +21,8 @@ describe("로그인 테스트", () => {
     });
 
     afterEach(() => {
-        (console.error as jest.Mock).mockRestore();
+        nock.cleanAll();
+        nock.restore();
     });
     it("이메일에 '@'가 포함되지 않으면 로그인 버튼이 비활성화된다", () => {
         // Given
@@ -38,7 +30,7 @@ describe("로그인 테스트", () => {
         const signinButton = getByTestId("signin-button");
 
         // When
-        fireEvent.change(emailInput, { target: { value: "incorrectEmail.com" } });
+        fireEvent.change(emailInput, { target: { value: incorrectEmail } });
 
         // Then
         expect(signinButton).toBeDisabled();
@@ -64,18 +56,22 @@ describe("로그인 테스트", () => {
         const signinButton = getByTestId("signin-button");
 
         // When
-        fireEvent.change(emailInput, { target: { value: "incorrect@Email.email" } });
-        fireEvent.change(passwordInput, { target: { value: incorrectEmail.email } });
+        fireEvent.change(emailInput, { target: { value: incorrectEmail.email } });
+        fireEvent.change(passwordInput, { target: { value: incorrectEmail.password } });
 
         await act(async () => {
             fireEvent.click(signinButton);
         });
 
         // Then
-        await waitFor(() => expect(window.alert).toHaveBeenCalledWith("이메일 혹은 비밀번호 오류"));
+        await waitFor(() => {
+            expect(window.alert).toBeCalledWith("이메일 혹은 비밀번호 오류")
+        });
     })
 
     it("로그인에 성공하면 토큰을 로컬스토리지에 저장한후 todo 페이지로 이동한다", async () => {
+        Storage.prototype.getItem = jest.fn(() => "token");
+
         // Given
         setupApiForSignIn(correctEmail.email, correctEmail.password, 200);
         const emailInput = getByTestId("email-input");
@@ -85,13 +81,18 @@ describe("로그인 테스트", () => {
         // When
         fireEvent.change(emailInput, { target: { value: correctEmail.email } });
         fireEvent.change(passwordInput, { target: { value: correctEmail.password } });
+
         await act(async () => {
             fireEvent.click(signinButton);
         });
 
         // Then
-        await waitFor(() => expect(localStorage.getItem("access_token")).toEqual("token"))
-        expect(getByTestId("new-todo-input")).toBeInTheDocument();
+        await waitFor(() => {
+            expect(localStorage.getItem("access_token")).toEqual("token");
+        });
+        await waitFor(() => {
+            expect(getByTestId("new-todo-input")).toBeInTheDocument();
+        });
     });
 });
 

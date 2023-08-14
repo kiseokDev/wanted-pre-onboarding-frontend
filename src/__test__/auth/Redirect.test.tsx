@@ -4,9 +4,7 @@
 // 로컬 스토리지에 토큰이 없는 상태로 /todo페이지에 접속한다면 /signin 경로로 리다이렉트 시켜주세요
 
 import { render, waitFor } from "@testing-library/react";
-import WrappedApp, { AppRoutes } from "../../App";
-import { MemoryRouter } from "react-router-dom";
-import { AuthProvider } from "../../components";
+import { TestApp } from "../TestApp";
 
 
 describe("로그인 여부에 따른 리다이렉트 처리 테스트", () => {
@@ -14,11 +12,7 @@ describe("로그인 여부에 따른 리다이렉트 처리 테스트", () => {
         Storage.prototype.getItem = jest.fn(() => 'mocked_token_value');
 
         const { getByTestId } = render(
-            <AuthProvider>
-                <MemoryRouter initialEntries={['/signin']}>
-                    <AppRoutes />
-                </MemoryRouter>
-            </AuthProvider>
+            <TestApp path='/signin' />
         );
 
         // 경로가 /todo로 바뀌었는지 확인
@@ -32,10 +26,8 @@ describe("로그인 여부에 따른 리다이렉트 처리 테스트", () => {
 
         Storage.prototype.getItem = jest.fn(() => null);
         const { getByTestId } = render(
-            <MemoryRouter initialEntries={['/todo']}>
-                <AppRoutes />
-            </MemoryRouter>
-        );
+            <TestApp path='/todo' />
+        )
 
         // 경로가 /todo로 바뀌었는지 확인
         await waitFor(() => {
