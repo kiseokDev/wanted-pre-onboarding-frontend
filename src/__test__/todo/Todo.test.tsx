@@ -50,4 +50,40 @@ describe("Todo 컴포넌트 테스트", () => {
             expect(screen.getAllByText('새로운 TODO')[0]).toBeInTheDocument();
         })
     })
+
+    it("TODO의 체크박스를 통해 완료 여부를 수정할 수 있다.", async () => {
+        const { getByTestId, getAllByTestId } = render(<TestApp path="/todo" />);
+        // given
+        const todoCheckbox = await waitFor(() => getAllByTestId("todo-checkbox")[0] as HTMLInputElement);
+        // when
+        const initialCheckedStatus = todoCheckbox.checked;
+        // then
+        if (!initialCheckedStatus) {
+            fireEvent.click(todoCheckbox);
+
+            await waitFor(() => {
+                expect(todoCheckbox).toBeChecked();
+            });
+
+            fireEvent.click(todoCheckbox);
+
+            await waitFor(() => {
+                expect(todoCheckbox).not.toBeChecked();
+            });
+
+        } else {
+            fireEvent.click(todoCheckbox);
+
+            await waitFor(() => {
+                expect(todoCheckbox).not.toBeChecked();
+            });
+
+            fireEvent.click(todoCheckbox);
+
+            await waitFor(() => {
+                expect(todoCheckbox).toBeChecked();
+            });
+        }
+    });
+
 });
