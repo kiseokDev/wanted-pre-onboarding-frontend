@@ -3,6 +3,7 @@ import { TestApp } from "../TestApp";
 import { testMockApiDefaultOption } from "../auth/util";
 import { act } from "react-dom/test-utils";
 import nock from "nock";
+import { idText } from "typescript";
 
 
 describe("Todo 컴포넌트 테스트", () => {
@@ -84,6 +85,17 @@ describe("Todo 컴포넌트 테스트", () => {
                 expect(todoCheckbox).toBeChecked();
             });
         }
+    });
+    it("TODO ITEM 수정버튼과 삭제버튼이 존재한다", async () => {
+        const { getAllByTestId } = render(<TestApp path="/todo" />);
+        // given
+        const todoModifyButton = await waitFor(() => getAllByTestId("modify-button")[0] as HTMLInputElement);
+        const todoDeleteButton = await waitFor(() => getAllByTestId("delete-button")[0] as HTMLInputElement);
+        // when 없음
+
+        // then
+        expect(todoModifyButton).toBeInTheDocument();
+        expect(todoDeleteButton).toBeInTheDocument();
     });
 
 });
