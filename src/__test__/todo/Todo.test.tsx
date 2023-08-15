@@ -4,6 +4,7 @@ import { testMockApiDefaultOption } from "../auth/util";
 import { act } from "react-dom/test-utils";
 import nock from "nock";
 import { idText } from "typescript";
+import { isGeneratorFunction } from "util/types";
 
 
 describe("Todo 컴포넌트 테스트", () => {
@@ -53,39 +54,35 @@ describe("Todo 컴포넌트 테스트", () => {
     })
 
     it("TODO의 체크박스를 통해 완료 여부를 수정할 수 있다.", async () => {
-        const { getByTestId, getAllByTestId } = render(<TestApp path="/todo" />);
+        // Extract rerender method along with other utilities
+        const { getAllByTestId, rerender } = render(<TestApp path="/todo" />);
+
         // given
         const todoCheckbox = await waitFor(() => getAllByTestId("todo-checkbox")[0] as HTMLInputElement);
-        // when
         const initialCheckedStatus = todoCheckbox.checked;
-        // then
-        if (!initialCheckedStatus) {
+
+        console.log(initialCheckedStatus) // this is false
+        await act(async () => {
             fireEvent.click(todoCheckbox);
+        });
 
-            await waitFor(() => {
-                expect(todoCheckbox).toBeChecked();
-            });
+        await waitFor(() => {
+            expect(todoCheckbox.checked).toBe(!initialCheckedStatus);
+        });
+        // Act: Re-render the component using rerender method
+        rerender(<TestApp path="/todo" />);
 
-            fireEvent.click(todoCheckbox);
+        //then 
+        // Get the checkbox again after re-render
+        const reRenderedCheckbox = await waitFor(() => getAllByTestId("todo-checkbox")[0] as HTMLInputElement);
+        const initialReRenderedCheckedStatus = reRenderedCheckbox.checked;
+        console.log(initialReRenderedCheckedStatus);
 
-            await waitFor(() => {
-                expect(todoCheckbox).not.toBeChecked();
-            });
-
-        } else {
-            fireEvent.click(todoCheckbox);
-
-            await waitFor(() => {
-                expect(todoCheckbox).not.toBeChecked();
-            });
-
-            fireEvent.click(todoCheckbox);
-
-            await waitFor(() => {
-                expect(todoCheckbox).toBeChecked();
-            });
-        }
+        // // Assert: It should still be checked after re-render
+        expect(initialReRenderedCheckedStatus).toBe(!initialCheckedStatus);
     });
+
+
     it("TODO ITEM 수정버튼과 삭제버튼이 존재한다", async () => {
         const { getAllByTestId } = render(<TestApp path="/todo" />);
         // given
@@ -98,4 +95,23 @@ describe("Todo 컴포넌트 테스트", () => {
         expect(todoDeleteButton).toBeInTheDocument();
     });
 
+    // it("TODO ITEM 수정버튼을 클릭하면 TODO ITEM의 내용을 수정할 수 있다", async () => {
+    //     const { getAllByTestId, getByTestId } = render(<TestApp path="/todo" />);
+    //     // given
+    //     const todoModifyButton = await waitFor(() => getAllByTestId("modify-button")[0] as HTMLInputElement);
+    //     const todoInput = getByTestId("new-todo-input");
+    //     const todoAddButton = getByTestId("new-todo-add-button");
+    //     // when
+    //     await act(async () => {
+    //         fireEvent.change(todoInput, { target: { value: "새로운 TODO" } });
+    //         fireEvent.click(todoAddButton);
+    //     });
+    //     await act(async () => {
+    //         fireEvent.click(todoModifyButton);
+    //     });
+    //     // then
+    //     await waitFor(() => {
+    //         expect(todoInput).toHaveValue("새로운 TODO");
+    //     })
+    // });
 });
