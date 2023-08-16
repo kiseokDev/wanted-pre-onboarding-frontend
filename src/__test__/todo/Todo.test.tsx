@@ -28,7 +28,8 @@ describe("Todo 컴포넌트 테스트", () => {
         nock.restore();
     })
 
-    it("/todo경로에 접속하면 TodoInsert Component가 렌더링 된다", () => {
+    //assignment5
+    it("todo페이지에 페이지에 새로운 TODO를 입력할 수 있는 input과 추가 button이 있다", () => {
         const { getByTestId } = render(<TestApp path="/todo" />);
         const todoInput = getByTestId("new-todo-input");
         const todoAddButton = getByTestId("new-todo-add-button");
@@ -36,6 +37,7 @@ describe("Todo 컴포넌트 테스트", () => {
         expect(todoAddButton).toBeInTheDocument();
     });
 
+    //assignment6-2
     it("추가 button을 클릭하면 입력 input의 내용이 새로운 TODO로 추가된다", async () => {
         const { getByTestId } = render(<TestApp path="/todo" />);
 
@@ -55,6 +57,7 @@ describe("Todo 컴포넌트 테스트", () => {
         })
     })
 
+    //assignment7
     it("TODO의 체크박스를 통해 완료 여부를 수정할 수 있다.", async () => {
         // Extract rerender method along with other utilities
         const { getAllByTestId, rerender } = render(<TestApp path="/todo" />);
@@ -82,7 +85,7 @@ describe("Todo 컴포넌트 테스트", () => {
         expect(initialReRenderedCheckedStatus).toBe(!initialCheckedStatus);
     });
 
-
+    //assignment8
     it("TODO ITEM 수정버튼과 삭제버튼이 존재한다", async () => {
         // given
         const { getAllByTestId } = render(<TestApp path="/todo" />);
@@ -96,21 +99,23 @@ describe("Todo 컴포넌트 테스트", () => {
         expect(todoDeleteButton).toBeInTheDocument();
     });
 
-    // it("TODO ITEM 수정버튼을 클릭하면 TODO ITEM의 내용을 수정할 수 있다", async () => {
-    //     const { getAllByTestId, getByTestId } = render(<TestApp path="/todo" />);
-    //     // given
+    //assignment10
+    it("TODO ITEM 수정버튼을 클릭하면 TODO ITEM의 내용을 수정할 수 있다", async () => {
+        const { getAllByTestId, getByTestId } = render(<TestApp path="/todo" />);
+        // given
 
-    //     // when
-    //     const todoModifyButton = await waitFor(() => getAllByTestId("modify-button")[0] as HTMLInputElement);
-    //     await act(async () => {
-    //         fireEvent.click(todoModifyButton);
-    //     });
+        // when
+        const todoModifyButton = await waitFor(() => getAllByTestId("modify-button")[0] as HTMLInputElement);
+        await act(async () => {
+            fireEvent.click(todoModifyButton);
+        });
 
-    //     expect(getByTestId("modify-input")).toBeInTheDocument();
-    //     expect(getByTestId("submit-button")).toBeInTheDocument();
-    //     expect(getByTestId("cancel-button")).toBeInTheDocument();
-    // });
+        expect(getByTestId("modify-input")).toBeInTheDocument();
+        expect(getByTestId("submit-button")).toBeInTheDocument();
+        expect(getByTestId("cancel-button")).toBeInTheDocument();
+    });
 
+    //assingment9
     it("TODO TIEM의 삭제버튼을 클릭하면 TODO ITEM이 삭제된다", async () => {
         const { getAllByTestId, getByText } = render(<TestApp path="/todo" />);
         // given
@@ -129,4 +134,5 @@ describe("Todo 컴포넌트 테스트", () => {
             expect(getByText("할 일이 없습니다.")).toBeInTheDocument();
         });
     });
+
 });
