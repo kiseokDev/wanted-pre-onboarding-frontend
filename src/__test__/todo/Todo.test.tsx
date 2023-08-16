@@ -1,10 +1,12 @@
-import { fireEvent, getAllByText, render, screen, waitFor, within } from "@testing-library/react";
+import { fireEvent, getAllByText, getByText, render, screen, waitFor, within } from "@testing-library/react";
 import { TestApp } from "../TestApp";
 import { testMockApiDefaultOption } from "../auth/util";
 import { act } from "react-dom/test-utils";
 import nock from "nock";
-import { idText } from "typescript";
+import { idText, isTryStatement } from "typescript";
 import { isGeneratorFunction } from "util/types";
+import { totalmem } from "os";
+import exp from "constants";
 
 
 describe("Todo 컴포넌트 테스트", () => {
@@ -61,7 +63,6 @@ describe("Todo 컴포넌트 테스트", () => {
         const todoCheckbox = await waitFor(() => getAllByTestId("todo-checkbox")[0] as HTMLInputElement);
         const initialCheckedStatus = todoCheckbox.checked;
 
-        console.log(initialCheckedStatus) // this is false
         await act(async () => {
             fireEvent.click(todoCheckbox);
         });
@@ -76,7 +77,6 @@ describe("Todo 컴포넌트 테스트", () => {
         // Get the checkbox again after re-render
         const reRenderedCheckbox = await waitFor(() => getAllByTestId("todo-checkbox")[0] as HTMLInputElement);
         const initialReRenderedCheckedStatus = reRenderedCheckbox.checked;
-        console.log(initialReRenderedCheckedStatus);
 
         // // Assert: It should still be checked after re-render
         expect(initialReRenderedCheckedStatus).toBe(!initialCheckedStatus);
@@ -84,11 +84,12 @@ describe("Todo 컴포넌트 테스트", () => {
 
 
     it("TODO ITEM 수정버튼과 삭제버튼이 존재한다", async () => {
-        const { getAllByTestId } = render(<TestApp path="/todo" />);
         // given
+        const { getAllByTestId } = render(<TestApp path="/todo" />);
+
+        // when
         const todoModifyButton = await waitFor(() => getAllByTestId("modify-button")[0] as HTMLInputElement);
         const todoDeleteButton = await waitFor(() => getAllByTestId("delete-button")[0] as HTMLInputElement);
-        // when 없음
 
         // then
         expect(todoModifyButton).toBeInTheDocument();
@@ -98,20 +99,34 @@ describe("Todo 컴포넌트 테스트", () => {
     // it("TODO ITEM 수정버튼을 클릭하면 TODO ITEM의 내용을 수정할 수 있다", async () => {
     //     const { getAllByTestId, getByTestId } = render(<TestApp path="/todo" />);
     //     // given
-    //     const todoModifyButton = await waitFor(() => getAllByTestId("modify-button")[0] as HTMLInputElement);
-    //     const todoInput = getByTestId("new-todo-input");
-    //     const todoAddButton = getByTestId("new-todo-add-button");
+
     //     // when
-    //     await act(async () => {
-    //         fireEvent.change(todoInput, { target: { value: "새로운 TODO" } });
-    //         fireEvent.click(todoAddButton);
-    //     });
+    //     const todoModifyButton = await waitFor(() => getAllByTestId("modify-button")[0] as HTMLInputElement);
     //     await act(async () => {
     //         fireEvent.click(todoModifyButton);
     //     });
-    //     // then
-    //     await waitFor(() => {
-    //         expect(todoInput).toHaveValue("새로운 TODO");
-    //     })
+
+    //     expect(getByTestId("modify-input")).toBeInTheDocument();
+    //     expect(getByTestId("submit-button")).toBeInTheDocument();
+    //     expect(getByTestId("cancel-button")).toBeInTheDocument();
     // });
+
+    it("TODO TIEM의 삭제버튼을 클릭하면 TODO ITEM이 삭제된다", async () => {
+        const { getAllByTestId, getByText } = render(<TestApp path="/todo" />);
+        // given
+        const todoDeleteButtons = await waitFor(() => getAllByTestId("delete-button"));
+
+        // when
+        await act(async () => {
+            // fireEvent.click(todoDeleteButton);
+            todoDeleteButtons.forEach((todoDeleteButton) => {
+                fireEvent.click(todoDeleteButton);
+            });
+        });
+
+        // then
+        await waitFor(() => {
+            expect(getByText("할 일이 없습니다.")).toBeInTheDocument();
+        });
+    });
 });

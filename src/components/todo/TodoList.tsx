@@ -10,11 +10,11 @@ export default function TodoList() {
         <div>
             <TodoInsert handleInsert={handleInsert} ></TodoInsert>
 
-            <ul>
+            {todos?.length === 0 ? <p>할 일이 없습니다.</p> : <ul data-testid="todo-list">
                 {todos.map((todo: TodoType, index) => (
                     <TodoContainer key={index} todo={todo} handleDelete={handleDelete} handleUpdate={handleUpdate} handleToggle={handleToggle} />
                 ))}
-            </ul>
+            </ul>}
         </div >
     );
 }
