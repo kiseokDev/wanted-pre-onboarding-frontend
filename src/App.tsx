@@ -2,6 +2,9 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, AuthContext } from './components';
 import { useContext } from 'react';
 import { SignInPage, SignUpPage, TodoPage } from './pages';
+import { ReactQueryDevtools } from 'react-query/devtools';
+import { QueryClient, QueryClientProvider } from 'react-query';
+
 
 export const AppRoutes: React.FC = () => {
   const { token } = useContext(AuthContext);
@@ -16,13 +19,26 @@ export const AppRoutes: React.FC = () => {
   );
 }
 
+// const App: React.FC = () => {
+//   return (
+//     <AuthProvider>
+//       <BrowserRouter>
+//         <AppRoutes />
+//       </BrowserRouter>
+//     </AuthProvider>
+//   );
+// }
 const App: React.FC = () => {
+  const queryClient = new QueryClient();
   return (
-    <AuthProvider>
-      <BrowserRouter>
-        <AppRoutes />
-      </BrowserRouter>
-    </AuthProvider>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <BrowserRouter>
+          <AppRoutes />
+        </BrowserRouter>
+      </AuthProvider>
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
   );
 }
 
