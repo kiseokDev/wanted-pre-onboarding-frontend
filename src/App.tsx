@@ -19,15 +19,7 @@ export const AppRoutes: React.FC = () => {
   );
 }
 
-// const App: React.FC = () => {
-//   return (
-//     <AuthProvider>
-//       <BrowserRouter>
-//         <AppRoutes />
-//       </BrowserRouter>
-//     </AuthProvider>
-//   );
-// }
+
 const App: React.FC = () => {
   const queryClient = new QueryClient();
   return (
