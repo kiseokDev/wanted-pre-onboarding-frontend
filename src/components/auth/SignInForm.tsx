@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import useAuthForm from '../../hooks/useAuthApiHandlersHook';
+import useAuthForm from '../../hooks/useAuth';
 
 export default function SignInForm() {
     const { email, password, isFormValid, handleEmailChange, handlePasswordChange, handleSignInSubmit } = useAuthForm();

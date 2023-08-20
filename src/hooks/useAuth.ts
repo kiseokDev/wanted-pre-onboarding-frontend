@@ -3,10 +3,10 @@ import {validateForm} from "../features";
 import {AuthAPI} from "../api";
 import {useNavigate} from "react-router-dom";
 import {AuthContext} from "../components";
-import axios, {AxiosError} from "axios";
+import {AxiosError} from "axios";
 import {useMutation} from "react-query";
-import {AuthPayload} from "../types/";
-import {hasMessage, isErrorMessage} from "../util/";
+import {AuthPayload} from "../types";
+import {hasMessage, isErrorMessage} from "../util";
 
 export default function useAuthApiHandlersHook() {
   const api = new AuthAPI();
