@@ -1,7 +1,6 @@
+import {AuthPayload} from "../types";
 import {createAPI} from "./axios-instance";
 import API from "./url";
-
-type AuthPayload = {email: string; password: string};
 
 export class AuthAPI {
   private api = createAPI();

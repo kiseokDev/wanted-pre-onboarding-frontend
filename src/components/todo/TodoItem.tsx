@@ -15,6 +15,7 @@ export default function TodoItem({ todo, handleDelete, handleEdit, handleToggle 
                     type="checkbox"
                     checked={todo.isCompleted}
                     onChange={() => handleToggle(todo)}
+                    data-testid="todo-checkbox"
                 />
                 <span>{todo.todo}</span>
             </label>

@@ -3,6 +3,8 @@ import {ActionType, AddTodoAction, DeleteTodoAction, InitTodoAction, TodoType, T
 const TOGGLE_TODO = "TOGGLE_TODO";
 const ADD_TODO = "ADD_TODO";
 const DELETE_TODO = "DELETE_TODO";
+const UPDATE_TODO = "UPDATE_TODO";
+const INIT_TODO = "INIT_TODO";
 
 export function todoReducer(state: TodoType[], action: ActionType): TodoType[] {
   switch (action.type) {
@@ -42,14 +44,14 @@ export function deleteTodo(id: number): DeleteTodoAction {
 
 export function updateTodo(todo: TodoType): UpdateTodoAction {
   return {
-    type: "UPDATE_TODO",
+    type: UPDATE_TODO,
     todo,
   };
 }
 
 export function initTodo(todos: TodoType[]): InitTodoAction {
   return {
-    type: "INIT_TODO",
+    type: INIT_TODO,
     todos,
   };
 }
