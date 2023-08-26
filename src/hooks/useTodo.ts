@@ -3,7 +3,7 @@ import {TodoAPI} from "../api";
 import useReducerHook from "./useReducerHook";
 import {TodoType, UseTodoApiHandlerHookType} from "../types";
 
-export default function useTodoApiHandlersHook(): UseTodoApiHandlerHookType {
+export default function useTodo(): UseTodoApiHandlerHookType {
   const [todos, onInit, onInsert, onToggle, onDelete, onUpdate] = useReducerHook();
   const api = new TodoAPI();
 
