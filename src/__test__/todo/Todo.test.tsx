@@ -15,6 +15,7 @@ describe("Todo 컴포넌트 테스트", () => {
 
         testMockApiDefaultOption("/todos")
             .post('/todos', { todo: "새로운 TODO" })
+            .delay(50)
             .reply(201, {
                 "id": 1,
                 "todo": "새로운 TODO",
@@ -38,24 +39,24 @@ describe("Todo 컴포넌트 테스트", () => {
     });
 
     //assignment6-2
+
     it("추가 button을 클릭하면 입력 input의 내용이 새로운 TODO로 추가된다", async () => {
         const { getByTestId } = render(<TestApp path="/todo" />);
 
-        // given 
         const todoInput = getByTestId("new-todo-input");
         const todoAddButton = getByTestId("new-todo-add-button");
 
-        // when
-        await act(async () => {
+        // Use act only for fireEvent, and waitFor separately for assertions
+        act(() => {
             fireEvent.change(todoInput, { target: { value: "새로운 TODO" } });
             fireEvent.click(todoAddButton);
         });
 
-        // then
         await waitFor(() => {
             expect(screen.getAllByText('새로운 TODO')[0]).toBeInTheDocument();
-        })
-    })
+        });
+    });
+
 
     //assignment7
     it("TODO의 체크박스를 통해 완료 여부를 수정할 수 있다.", async () => {
@@ -66,7 +67,7 @@ describe("Todo 컴포넌트 테스트", () => {
         const todoCheckbox = await waitFor(() => getAllByTestId("todo-checkbox")[0] as HTMLInputElement);
         const initialCheckedStatus = todoCheckbox.checked;
 
-        await act(async () => {
+        act(() => {
             fireEvent.click(todoCheckbox);
         });
 
@@ -82,7 +83,9 @@ describe("Todo 컴포넌트 테스트", () => {
         const initialReRenderedCheckedStatus = reRenderedCheckbox.checked;
 
         // // Assert: It should still be checked after re-render
-        expect(initialReRenderedCheckedStatus).toBe(!initialCheckedStatus);
+        await waitFor(() => {
+            expect(initialReRenderedCheckedStatus).toBe(!initialCheckedStatus);
+        });
     });
 
     //assignment8
@@ -122,7 +125,7 @@ describe("Todo 컴포넌트 테스트", () => {
         const todoDeleteButtons = await waitFor(() => getAllByTestId("delete-button"));
 
         // when
-        await act(async () => {
+        act(() => {
             // fireEvent.click(todoDeleteButton);
             todoDeleteButtons.forEach((todoDeleteButton) => {
                 fireEvent.click(todoDeleteButton);

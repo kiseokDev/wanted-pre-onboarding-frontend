@@ -22,7 +22,7 @@ describe("회원가입 실패 테스트", () => {
         fireEvent.change(emailInput, { target: { value: "test@gmail.com" } });
         fireEvent.change(passwordInput, { target: { value: "12345678" } });
 
-        await act(async () => {
+        act(() => {
             fireEvent.click(signupButton);
         });
 
