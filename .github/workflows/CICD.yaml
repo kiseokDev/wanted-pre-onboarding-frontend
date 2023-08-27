@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           ref: "dev"
-      - run: npm ci
+      - run: npm install
       - run: npm run test
       - run: npm run build
       - name: deploy to s3
