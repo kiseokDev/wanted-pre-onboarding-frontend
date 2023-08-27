@@ -11,7 +11,7 @@ import exp from "constants";
 
 describe("Todo 컴포넌트 테스트", () => {
     beforeEach(() => {
-        Storage.prototype.getItem = jest.fn(() => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QxMjM0QGdtYWlsLmNvbSIsInN1YiI6MSwiaWF0IjoxNjkxOTg3NzMxLCJleHAiOjE2OTI1OTI1MzF9.CE0tzzngOtXiRsdYLmpczDjs96R9MxbvkJPaXLyR9nc');
+        Storage.prototype.getItem = jest.fn(() => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QxMjM0QGdtYWlsLmNvbSIsInN1YiI6MzI3LCJpYXQiOjE2OTMxMjEzMjMsImV4cCI6MTY5MzcyNjEyM30._7GfhIas-0zQtmkAuYYLqzMWBIg8VY1wsYfm5ZqYcNw');
 
         testMockApiDefaultOption("/todos")
             .post('/todos', { todo: "새로운 TODO" })
