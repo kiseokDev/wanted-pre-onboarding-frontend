@@ -1,0 +1,13 @@
+name: CI/CD
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  cicd:
+    runs-on: ubuntu-latest
+    steps:
+      - run: node -v
+      - run: echo hello world
