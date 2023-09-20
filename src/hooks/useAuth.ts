@@ -5,9 +5,8 @@ import {useNavigate} from "react-router-dom";
 import {AuthContext} from "../components";
 import axios from "axios";
 
-export default function useAuthApiHandlersHook() {
+export default function useAuth() {
   const api = new AuthAPI();
-  const navigator = useNavigate();
   const {setToken} = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -32,7 +31,8 @@ export default function useAuthApiHandlersHook() {
     try {
       const response = await api.signUpApi({email, password});
       if (response.status === 201) {
-        navigator("/signin");
+        localStorage.setItem("access_token", response.data.access_token); 
+        setToken(response.data.access_token);
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -48,18 +48,15 @@ export default function useAuthApiHandlersHook() {
     try {
       const response = await api.signInApi({email, password});
       if (response.status === 200) {
-        localStorage.setItem("access_token", response.data.access_token); // JWT를 로컬 스토리지에 저장
-        setToken(response.data.access_token); // 토큰 설정
-        navigator("/todo");
+        localStorage.setItem("access_token", response.data.access_token);
+        setToken(response.data.access_token); 
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response?.status === 401) {
-          // 비밀번호 오류
           alert("이메일 혹은 비밀번호 오류");
-        } else if (error.response?.status === 404 && error.response.data.message === "해당 사용자가 존재하지 않습니다.") {
-          // alert("해당 사용자가 존재하지 않습니다.");
-          alert("이메일 혹은 비밀번호 오류");
+        } else if (error.response?.status === 404) {
+          alert(error.response.data.message); //"해당 사용자가 존재하지 않습니다."
         }
       }
     }

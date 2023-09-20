@@ -6,10 +6,10 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-    const [token, setToken] = useState(localStorage.getItem('access_token'));
+    const [token, setToken] = useState<string|null>('');
 
-    useEffect(() => {
-        const tokenFromStorage = localStorage.getItem('access_token');
+    useEffect(() => {;
+        const tokenFromStorage = localStorage.getItem('access_token')
         setToken(tokenFromStorage);
     }, []);
 

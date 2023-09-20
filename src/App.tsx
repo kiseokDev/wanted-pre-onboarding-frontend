@@ -1,13 +1,20 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, AuthContext } from './components';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { SignInPage, SignUpPage, TodoPage } from './pages';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
 
 export const AppRoutes: React.FC = () => {
-  const { token } = useContext(AuthContext);
+  const { token} = useContext(AuthContext);
+  // const [tokenState,setToken] = useState<string|null>(null);
+  // useEffect(() => {
+  //   const tokenFromStorage = localStorage.getItem('access_token')
+  //   console.log(token,'in app.tsx');
+  //   setToken(tokenFromStorage);
+  // },[])
+
 
   return (
     <Routes>

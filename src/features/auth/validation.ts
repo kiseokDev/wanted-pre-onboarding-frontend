@@ -1,9 +1,9 @@
-export const validateEmail = (email: string) => {
+ const validateEmail = (email: string) => {
   const regex = /@/;
   return regex.test(email);
 };
 
-export const validatePassword = (password: string) => {
+ const validatePassword = (password: string) => {
   return password.length >= 8;
 };
 
