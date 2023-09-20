@@ -1,2 +1,2 @@
 export * from "./auth/validation";
-export {todoReducer, addTodo, deleteTodo, toggleTodo, updateTodo, initTodo} from "./todo/todo";
+export {todoReducer, addTodoAction, deleteTodoAction, toggleTodoAction, updateTodoAction, initTodoAction} from "./todo/todo";

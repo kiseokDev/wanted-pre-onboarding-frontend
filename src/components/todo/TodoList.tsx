@@ -2,9 +2,11 @@ import { TodoType } from '../../types';
 import TodoInsert from './TodoInsert';
 import TodoContainer from './TodoContainer';
 import { useTodoWithReactQuery } from '../../hooks';
+import useTodo from '../../hooks/useTodo';
 
 export default function TodoList() {
-    const [todos, handleInsert, handleToggle, handleUpdate, handleDelete] = useTodoWithReactQuery();
+    // const [todos, handleInsert, handleToggle, handleUpdate, handleDelete] = useTodoWithReactQuery();
+    const {todos,  handleInsert, handleToggle, handleUpdate, handleDelete} = useTodo();
 
     return (
         <div>

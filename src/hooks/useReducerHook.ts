@@ -1,28 +1,37 @@
 import {useReducer} from "react";
-import {addTodo, deleteTodo, todoReducer, toggleTodo, updateTodo, initTodo} from "../features";
-import {TodoType, UseTodoReducerHookType} from "../types";
+import { todoReducer, addTodoAction, deleteTodoAction,toggleTodoAction, updateTodoAction, initTodoAction} from "../features";
+import {TodoType} from "../types";
 
-export default function useReducerHook(): UseTodoReducerHookType {
+ type UseTodoReducerHookType = [
+  todos: TodoType[],
+  onInit: (todos: TodoType[]) => void,
+  onInsert: (todo: TodoType) => void,
+  onToggle: (id: number) => void,
+  onDelete: (id: number) => void,
+  onUpdate: (todo: TodoType) => void
+];
+
+export default function useCustomReducer(): UseTodoReducerHookType {
   const [todos, dispatch] = useReducer(todoReducer, []);
 
   const onInit = (todos: TodoType[]) => {
-    dispatch(initTodo(todos));
+    dispatch(initTodoAction(todos));
   };
 
   const onInsert = (todo: TodoType) => {
-    dispatch(addTodo(todo));
+    dispatch(addTodoAction(todo));
   };
 
   const onToggle = (id: number) => {
-    dispatch(toggleTodo(id));
+    dispatch(toggleTodoAction(id));
   };
 
   const onDelete = (id: number) => {
-    dispatch(deleteTodo(id));
+    dispatch(deleteTodoAction(id));
   };
 
   const onUpdate = (todo: TodoType) => {
-    dispatch(updateTodo(todo));
+    dispatch(updateTodoAction(todo));
   };
 
   return [todos, onInit, onInsert, onToggle, onDelete, onUpdate];

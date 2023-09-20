@@ -1,27 +1,25 @@
 import React, {useEffect, useState} from "react";
 import {TodoAPI} from "../api";
-import useReducerHook from "./useReducerHook";
+import useCustomReducer from "./useReducerHook";
 import {TodoType, UseTodoApiHandlerHookType} from "../types";
 
 export default function useTodo(): UseTodoApiHandlerHookType {
-  const [todos, onInit, onInsert, onToggle, onDelete, onUpdate] = useReducerHook();
+  const [todos, onInit, onInsert, onToggle, onDelete, onUpdate] = useCustomReducer();
   const api = new TodoAPI();
 
-  const useHandleInit = () => {
     useEffect(() => {
       (async () => {
         try {
-          const response = await api.getAllTodosApi(); // API 호출
+          const response = await api.getAllTodosApi();
           onInit(response.data);
         } catch (error) {
           console.error(error);
         }
       })();
     }, []);
-  };
 
   const handleInsert = async (newTodo: string, setNewTodo: React.Dispatch<React.SetStateAction<string>>) => {
-    if (newTodo.trim() === "") return; // Empty input handling
+    if (newTodo.trim() === "") return; 
     try {
       const response = await api.createTodoApi({todo: newTodo});
 
@@ -56,5 +54,5 @@ export default function useTodo(): UseTodoApiHandlerHookType {
     }
   };
 
-  return [todos, useHandleInit, handleInsert, handleToggle, handleUpdate, handleDelete];
+  return {todos, handleInsert, handleToggle, handleUpdate, handleDelete};
 }
