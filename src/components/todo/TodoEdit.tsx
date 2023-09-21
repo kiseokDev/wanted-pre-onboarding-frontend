@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { TodoAPI } from "../../api";
 import { TodoType } from "../../types";
 
 interface Props {
