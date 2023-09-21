@@ -1,4 +1,4 @@
-import {useReducer} from "react";
+import {useCallback, useReducer} from "react";
 import { todoReducer, addTodoAction, deleteTodoAction,toggleTodoAction, updateTodoAction, initTodoAction} from "../features";
 import {TodoType} from "../types";
 
@@ -14,9 +14,9 @@ import {TodoType} from "../types";
 export default function useCustomReducer(): UseTodoReducerHookType {
   const [todos, dispatch] = useReducer(todoReducer, []);
 
-  const onInit = (todos: TodoType[]) => {
+  const onInit = useCallback((todos: TodoType[]) => {
     dispatch(initTodoAction(todos));
-  };
+  },[]);
 
   const onInsert = (todo: TodoType) => {
     dispatch(addTodoAction(todo));

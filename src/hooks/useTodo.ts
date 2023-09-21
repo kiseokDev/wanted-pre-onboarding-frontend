@@ -1,27 +1,28 @@
-import React, {useEffect} from "react";
+import React, { useEffect, useRef} from "react";
 import {TodoAPI} from "../api";
 import useCustomReducer from "./useReducerHook";
 import {TodoType, UseTodoApiHandlerHookType} from "../types";
 
 export default function useTodo(): UseTodoApiHandlerHookType {
   const [todos, onInit, onInsert, onToggle, onDelete, onUpdate] = useCustomReducer();
-  const api = new TodoAPI();
+  const api = useRef(new TodoAPI());
 
-    useEffect(() => {
-      (async () => {
-        try {
-          const response = await api.getAllTodosApi();
-          onInit(response.data);
-        } catch (error) {
-          console.error(error);
-        }
-      })();
-    }, []);
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        const response = await api.current.getAllTodosApi();
+        onInit(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetch();
+  }, [onInit]);
 
   const handleInsert = async (newTodo: string, setNewTodo: React.Dispatch<React.SetStateAction<string>>) => {
     if (newTodo.trim() === "") return; 
     try {
-      const response = await api.createTodoApi({todo: newTodo});
+      const response = await api.current.createTodoApi({todo: newTodo});
 
       if (response.status === 201) {
         setNewTodo("");
@@ -33,14 +34,14 @@ export default function useTodo(): UseTodoApiHandlerHookType {
   };
 
   const handleToggle = async (todo: TodoType) => {
-    const response = await api.updateTodoApi(todo.id, {todo: todo.todo, isCompleted: !todo.isCompleted});
+    const response = await api.current.updateTodoApi(todo.id, {todo: todo.todo, isCompleted: !todo.isCompleted});
     if (response.status === 200) {
       onToggle(response.data.id);
     }
   };
 
   const handleUpdate = async (editText: string, todo: TodoType, setIsEditing: React.Dispatch<React.SetStateAction<boolean>>) => {
-    const response = await api.updateTodoApi(todo.id, {todo: editText, isCompleted: todo.isCompleted});
+    const response = await api.current.updateTodoApi(todo.id, {todo: editText, isCompleted: todo.isCompleted});
     if (response.status === 200) {
       onUpdate(response.data);
       setIsEditing(false);
@@ -48,7 +49,7 @@ export default function useTodo(): UseTodoApiHandlerHookType {
   };
 
   const handleDelete = async (todo: TodoType) => {
-    const response = await api.deleteTodoApi(todo.id);
+    const response = await api.current.deleteTodoApi(todo.id);
     if (response.status === 204) {
       onDelete(todo.id);
     }
